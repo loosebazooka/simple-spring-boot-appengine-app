@@ -1,11 +1,10 @@
 buildscript {
   repositories {
-    mavenLocal()
-      mavenCentral()
+    mavenCentral()
   }
   dependencies {
     classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE"
-    classpath "com.google.cloud.tools:appengine-gradle-plugin:2.0.0-SNAPSHOT"
+    classpath "com.google.cloud.tools:appengine-gradle-plugin:2.0.0-rc1"
   }
 }
 
