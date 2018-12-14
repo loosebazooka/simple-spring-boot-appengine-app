@@ -1,0 +1,5 @@
+runtime: java11
+service: springboot-standard
+entrypoint: java -jar my-app.jar
+# use a large instance for springboot
+instance_class: f4

@@ -1,0 +1,62 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE"
+    classpath "com.google.cloud.tools:appengine-gradle-plugin:2.0.0-SNAPSHOT"
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.google.cloud.tools.appengine'
+
+bootJar {
+  // basename matches our name in app.yaml entrypoint
+  baseName = 'my-app'
+}
+
+repositories {
+    mavenCentral()
+}
+
+if (project.hasProperty("flex")) {
+  // java 8 flex
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+  appengine.stage.appEngineDirectory = "src/main/appengine-flex"
+} else {
+  // java 11 standard
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+  appengine.stage.appEngineDirectory = "src/main/appengine-standard"
+}
+
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+appengine {
+  deploy {
+    projectId = "GCLOUD_CONFIG"
+    version = "GCLOUD_CONFIG"
+  }
+  stage {
+    // springboot is creating the new jar, so reference it correctly
+    artifact = tasks.bootJar.archivePath
+    extraFilesDirectory = project.file("src/main/extras")
+  }
+}
+
+
+wrapper {
+  gradleVersion = "4.10.2"
+}
