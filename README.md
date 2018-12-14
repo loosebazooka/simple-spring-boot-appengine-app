@@ -8,3 +8,11 @@ flex version
 standard version
 
 this is just stuff for testing, don't really use this
+
+## Gradle
+./gradlew appengine:deploy
+./gradlew appengine:deploy -Pflex
+
+## Maven
+./mvnw package appengine:deploy
+./mvnw package appengine:deploy -Dflex

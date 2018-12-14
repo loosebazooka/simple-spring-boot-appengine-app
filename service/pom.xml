@@ -33,12 +33,13 @@
     <!-- end::tests[] -->
   </dependencies>
 
-  <properties>
-    <java.version>1.8</java.version>
-  </properties>
-
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -59,6 +60,7 @@
         <artifactId>appengine-maven-plugin</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <configuration>
+          <extraFilesDirectory>src/main/extras</extraFilesDirectory>
           <!-- CLOUDSDK VARIATIONS -->
 
           <!--
@@ -72,17 +74,72 @@
 
           <!-- DEPLOYMENT VARIATIONS -->
           <!--
-          <project>APPENGINE_CONFIG</project>
+          <projectId>APPENGINE_CONFIG</projectId>
           <version>APPENGINE_CONFIG</version>
           -->
-          <project>GCLOUD_CONFIG</project>
+          <projectId>GCLOUD_CONFIG</projectId>
           <version>GCLOUD_CONFIG</version>
           <!--
-          <project>some-project</project>
+          <projectId>some-project</projectId>
           <version>1</version>
           -->
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <!-- standard profile -->
+    <profile>
+      <id>standard</id>
+      <activation>
+        <property>
+          <name>!flex</name>
+        </property>
+      </activation>
+      <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>appengine-maven-plugin</artifactId>
+            <configuration>
+              <appEngineDirectory>src/main/appengine-standard</appEngineDirectory>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!-- flex profile -->
+    <profile>
+      <id>flex</id>
+      <activation>
+        <property>
+          <name>flex</name>
+        </property>
+      </activation>
+      <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>appengine-maven-plugin</artifactId>
+            <configuration>
+              <appEngineDirectory>src/main/appengine-flex</appEngineDirectory>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
