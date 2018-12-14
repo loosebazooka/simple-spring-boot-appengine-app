@@ -1,7 +1,0 @@
-indexes:
-- kind: "TestData"
-  properties:
-  - name: "testField"
-    direction: asc
-  - name: "testField2"
-    direction: desc
